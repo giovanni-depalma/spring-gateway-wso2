@@ -54,3 +54,52 @@ to
 to avoid the discovery at startup time
 
 From the browser, digit 'http://localhost:8080/' and after login the expected result it's a simple response with "Welcome" string
+
+## Test Case
+
+With service provider created by "test-spring-gateway.xml" is possible to login with "carbon.super" user and tenant user.
+
+Chaning the setting in service provider, from Token Issuer Default -> JWT, is only possible to login with "carbon.super".
+
+
+It's possible create directly service provider with token isser JWT by file "test-spring-gateway-issuer-jwt.xml"
+
+### Debug Token Issuer: JWT
+Using issuer-uri: ${provider.host}/oauth2/token WSO2 logs this 
+```
+[2020-11-15 15:52:33,326] [a000f2e2-dcf6-43f3-8ae6-3659fbd84c32] DEBUG {org.wso2.carbon.identity.oauth.endpoint.user.OpenIDConnectUserEndpoint} - Error while building user info response. org.wso2.carbon.identity.oauth.user.UserInfoEndpointException: Access token validation failed
+        at org.wso2.carbon.identity.oauth.endpoint.user.impl.UserInfoISAccessTokenValidator.validateToken(UserInfoISAccessTokenValidator.java:63)
+        at org.wso2.carbon.identity.oauth.endpoint.user.OpenIDConnectUserEndpoint.getUserClaims(OpenIDConnectUserEndpoint.java:76)
+        at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+        at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+        at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+        at java.base/java.lang.reflect.Method.invoke(Method.java:566)
+        at org.apache.cxf.service.invoker.AbstractInvoker.performInvocation(AbstractInvoker.java:179)
+        at org.apache.cxf.service.invoker.AbstractInvoker.invoke(AbstractInvoker.java:96)
+        at org.apache.cxf.jaxrs.JAXRSInvoker.invoke(JAXRSInvoker.java:201)
+        at org.apache.cxf.jaxrs.JAXRSInvoker.invoke(JAXRSInvoker.java:104)
+        at org.apache.cxf.interceptor.ServiceInvokerInterceptor$1.run(ServiceInvokerInterceptor.java:59)
+```
+
+Changing configuration in 
+
+```
+provider:
+  wso2:
+#   issuer-uri: ${provider.host}/oauth2/token
+    token-uri: ${provider.host}/oauth2/token
+    authorization-uri: ${provider.host}/oauth2/authorize
+    user-info-uri: ${provider.host}/t/test.com/oauth2/userinfo
+    jwk-set-uri: ${provider.host}/oauth2/jwks
+    user-name-attribute: sub
+```
+(Of course test.com is the name of created tenant)
+
+login process works.
+
+Instead with user-info-uri and jwk-set-uri tenant based doesn't work, with another error:
+
+```
+Signed JWT rejected: Another algorithm expected, or no matching key(s) found
+```
+
