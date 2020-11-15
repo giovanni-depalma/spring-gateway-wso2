@@ -29,7 +29,7 @@ spring:
 #            issuer-uri: ${provider.host}/oauth2/token
             token-uri: ${provider.host}/oauth2/token
             authorization-uri: ${provider.host}/oauth2/authorize
-            user-info-uri: ${provider.host}/t/test.com/oauth2/userinfo
+            user-info-uri: ${provider.host}/oauth2/userinfo
             jwk-set-uri: ${provider.host}/oauth2/jwks
             user-name-attribute: sub
 
