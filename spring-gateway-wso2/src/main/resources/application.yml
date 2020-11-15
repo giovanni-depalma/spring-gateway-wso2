@@ -1,0 +1,41 @@
+provider:
+  host: https://localhost:9443 #Change the host
+
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: gateway
+          uri: forward:///gateway
+          predicates:
+            - Path=/gateway
+        - id: welcome
+          uri: forward:///
+          predicates:
+            - Path=/
+  security:
+    oauth2:
+      client:
+        registration:
+          wso2:
+            provider: wso2
+            authorizationGrantType: authorization_code
+            client-id: YYEVTvNCjpXiCQxJ0FTn1SRzJRAa
+            client-secret: NnMXF0IXyFfExAl_KbN1JdulRAca
+            redirect-uri: "{baseUrl}/login/oauth2/code/wso2"
+            scope: openid
+        provider:
+          wso2:
+            issuer-uri: ${provider.host}/oauth2/token
+#            token-uri: ${provider.host}/oauth2/token
+#            authorization-uri: ${provider.host}/oauth2/authorize
+#            user-info-uri: ${provider.host}/oauth2/userinfo
+#            jwk-set-uri: ${provider.host}/oauth2/jwks
+#            user-name-attribute: sub
+
+logging:
+  level:
+    root: DEBUG
+    org:
+      springframework:
+        security: DEBUG

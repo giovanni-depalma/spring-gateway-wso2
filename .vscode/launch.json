@@ -1,0 +1,15 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-SpringGatewayWso2Application<spring-gateway-wso2>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "console": "internalConsole",
+            "mainClass": "com.example.springgatewaywso2.SpringGatewayWso2Application",
+            "projectName": "spring-gateway-wso2",
+            "args": "",
+            "vmArgs": "-Djavax.net.ssl.trustStore=client-truststore.jks -Djavax.net.ssl.trustStorePassword=wso2carbon"
+        }
+    ]
+}
